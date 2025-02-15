@@ -1,0 +1,159 @@
+-- WALMART_SALES_PROJECT_SQL
+
+--CREATE DATABASE.
+CREATE DATABASE Walmart_sales_data;
+
+--CREATE TABLE sales.
+
+CREATE TABLE sales
+	(Invoice_ID VARCHAR(50) PRIMARY KEY,
+	 Branch VARCHAR(50),
+	 City VARCHAR(100),
+	 Customer_type VARCHAR(50),
+	 Gender VARCHAR(50),
+	 Product_line VARCHAR(100),
+	 Unit_price NUMERIC(10,2),
+	 Quantity INT,
+	 Tax_5	DECIMAL,
+	 Total NUMERIC(10,2),
+	 DATE_1 DATE,
+	 TIME_1 TIME,
+	 Payment VARCHAR(100),
+	 cogs NUMERIC,
+	 gross_margin_percentage NUMERIC(10,2),
+	 gross_income NUMERIC(10,2),
+	 Rating NUMERIC(10,1));
+
+-- DATA IMPORTED
+
+SELECT * FROM sales;
+
+-- 1.How many unique product lines does the data have?
+
+SELECT DISTINCT(product_line) FROM sales;
+
+--2. What is the most common payment method?
+
+SELECT Count(payment)AS common_payment_method, payment FROM sales
+Group by payment
+ORDER BY common_payment_method DESC
+LIMIT 1;
+
+--3. What is the most selling product line?
+
+SELECT COUNT(product_line)AS most_selling_product, product_line FROM sales
+GROUP BY product_line
+ORDER BY most_selling_product DESC
+LIMIT 1;
+
+--4.What is the total revenue by month?
+
+--First add month column in data 
+
+SELECT date_1,DATE_PART('month',date_1)AS month_name FROM sales;
+
+ALTER TABLE sales
+ADD COLUMN month_name VARCHAR(50);
+
+UPDATE sales
+SET month_name=DATE_PART('month',date_1);
+
+SELECT SUM(gross_income)AS total_revenue,month_name FROM sales
+GROUP BY month_name
+ORDER BY total_revenue ASC;
+
+--5. Which month recorded the highest cost of gold sold(COGS)?
+
+SELECT MAX(cogs)AS highest_cost_goldsold, month_name FROM sales
+GROUP BY month_name
+ORDER BY highest_cost_goldsold DESC
+LIMIT 1;
+
+--6. Which product line genrated highest revenue?
+
+SELECT * FROM sales;
+
+SELECT MAX(gross_income)AS highest_revenue,product_line FROM sales
+GROUP BY product_line
+ORDER BY  highest_revenue DESC
+LIMIT 1;
+
+--7. What is the city with largest revenue?
+
+SELECT * FROM sales;
+
+SELECT SUM(gross_income)AS largest_revenue, city FROM sales
+GROUP BY city
+ORDER BY largest_revenue DESC
+LIMIT 1;
+
+--8.What is the most common product line by gender?
+
+SELECT MAX(product_line)AS most_common_product,gender FROM sales
+GROUP BY gender
+ORDER BY most_common_product DESC
+LIMIT 1;
+
+--9. What is the average rating of each product line?
+
+SELECT ROUND(AVG(rating),2) AS avg_rating,product_line FROM sales
+GROUP BY product_line
+ORDER BY avg_rating DESC;
+
+10.Which of the customer type brings most revenue?
+
+SELECT * FROM sales;
+
+SELECT SUM(gross_income) AS most_revenue, customer_type FROM sales
+GROUP BY customer_type
+ORDER BY most_revenue DESC;
+
+--11.Which customer type pays the most value added tax?
+
+SELECT MAX(tax_5) AS largest_tax_percent, customer_type FROM sales
+GROUP BY customer_type
+ORDER BY largest_tax_percent DESC
+LIMIT 1;
+
+12.Which city have the largest value added tax?
+
+SELECT MAX(tax_5) AS largest_tax_percent, city FROM sales
+GROUP BY city
+ORDER BY largest_tax_percent DESC
+LIMIT 1;
+
+--13.How many unique payment methods data have?
+
+SELECT DISTINCT(payment) FROM sales ;
+
+--14.Which customer type buys the most product line?
+
+SELECT MAX(customer_type),product_line FROM sales
+GROUP BY product_line;
+
+--15. What is the gender of most customer?
+
+SELECT * FROM sales;
+
+SELECT count(gender),gender FROM sales
+GROUP BY gender
+LIMIT 1;
+
+--16. Which day of week has the best avg rating?
+
+--First add column of week
+
+SELECT date_1,DATE_PART('DOW',date_1)AS day_of_week FROM sales;
+
+ALTER TABLE sales
+ADD COLUMN day_of_week VARCHAR(50);
+
+UPDATE sales
+SET day_of_week=DATE_PART('DOW',date_1);
+
+SELECT ROUND(AVG(rating),2) AS avg_rating,day_of_week FROM sales
+GROUP BY day_of_week
+ORDER BY day_of_week ASC;
+
+
+
