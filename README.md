@@ -1,3 +1,5 @@
+![17403653433312267588666841417067](https://github.com/user-attachments/assets/105103c1-3501-4e3e-b83d-09c92b6808fc)
+
 # Walmart Sales Data SQL-Project
 
 # About
